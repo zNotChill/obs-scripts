@@ -21,13 +21,13 @@ function script_update(settings)
 
   obs.timer_remove(check_source_timer)
 
-  obs.script_log(obs.LOG_WARNING, "--------------")
-  obs.script_log(obs.LOG_WARNING, "Updated Settings:")
-  obs.script_log(obs.LOG_WARNING, "Tracked Source: " .. tracked_source)
-  obs.script_log(obs.LOG_WARNING, "Tracked Scene: " .. tracked_scene)
-  obs.script_log(obs.LOG_WARNING, "Connection Lost Source: " .. connection_lost_source)
-  obs.script_log(obs.LOG_WARNING, "Check Interval: " .. check_interval)
-  obs.script_log(obs.LOG_WARNING, "--------------")
+  -- obs.script_log(obs.LOG_WARNING, "--------------")
+  -- obs.script_log(obs.LOG_WARNING, "Updated Settings:")
+  -- obs.script_log(obs.LOG_WARNING, "Tracked Source: " .. tracked_source)
+  -- obs.script_log(obs.LOG_WARNING, "Tracked Scene: " .. tracked_scene)
+  -- obs.script_log(obs.LOG_WARNING, "Connection Lost Source: " .. connection_lost_source)
+  -- obs.script_log(obs.LOG_WARNING, "Check Interval: " .. check_interval)
+  -- obs.script_log(obs.LOG_WARNING, "--------------")
 
   if tracked_source ~= "nothing" and connection_lost_source ~= "nothing" then
     check_source_timer = obs.timer_add(tracked_source, check_interval * 1000)
@@ -115,17 +115,17 @@ function check_source()
     
     if not active then
       is_tracked_source_active = false
-      obs.script_log(obs.LOG_WARNING, "Source " .. tracked_source .. " is inactive. Switching to " .. connection_lost_source)
+      -- obs.script_log(obs.LOG_WARNING, "Source " .. tracked_source .. " is inactive. Switching to " .. connection_lost_source)
       if source_connection_lost_source ~= nil then
         -- make the source visible
-        obs.script_log(obs.LOG_WARNING, "Enabling source " .. connection_lost_source)
+        -- obs.script_log(obs.LOG_WARNING, "Enabling source " .. connection_lost_source)
 
         local scene_item = get_sceneitem_by_name(tracked_scene, connection_lost_source)
         
         if not obs.obs_sceneitem_visible(scene_item) then
           obs.obs_sceneitem_set_visible(scene_item, true)
         else
-          obs.script_log(obs.LOG_WARNING, "Source " .. connection_lost_source .. " is already visible.")
+          -- obs.script_log(obs.LOG_WARNING, "Source " .. connection_lost_source .. " is already visible.")
         end
 
         -- obs.obs_source_release(source) -- causes a crash? fix later
@@ -134,18 +134,18 @@ function check_source()
       end
     else if not is_tracked_source_active then
       is_tracked_source_active = true
-      obs.script_log(obs.LOG_WARNING, "Source " .. tracked_source .. " is now active. Hiding " .. connection_lost_source)
+      -- obs.script_log(obs.LOG_WARNING, "Source " .. tracked_source .. " is now active. Hiding " .. connection_lost_source)
 
       if source_connection_lost_source ~= nil then
         -- make the source visible
-        obs.script_log(obs.LOG_WARNING, "Disabling source " .. connection_lost_source)
+        -- obs.script_log(obs.LOG_WARNING, "Disabling source " .. connection_lost_source)
 
         local scene_item = get_sceneitem_by_name(tracked_scene, connection_lost_source)
         
         if obs.obs_sceneitem_visible(scene_item) then
           obs.obs_sceneitem_set_visible(scene_item, false)
         else
-          obs.script_log(obs.LOG_WARNING, "Source " .. connection_lost_source .. " is already hidden.")
+          -- obs.script_log(obs.LOG_WARNING, "Source " .. connection_lost_source .. " is already hidden.")
         end
 
         -- obs.obs_source_release(source)
@@ -155,6 +155,11 @@ function check_source()
     end
     end
   end
+end
+
+function wait(seconds)
+  local start = os.time()
+  repeat until os.time() > start + seconds
 end
 
 function script_load(settings)
